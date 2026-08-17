@@ -13,7 +13,7 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_security_group" "main" {
-  name                = "tfvmex-nsg"
+  name                = "${var.prefix}-nsg"
   location            = data.azurerm_resource_group.resource_group.location
   resource_group_name = data.azurerm_resource_group.resource_group.name
 
