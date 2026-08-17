@@ -1,19 +1,19 @@
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
+  name                = "${var.vnet_name}"
   address_space       = ["10.0.0.0/16"]
   location            = data.azurerm_resource_group.resource_group.location
   resource_group_name = data.azurerm_resource_group.resource_group.name
 }
 
 resource "azurerm_subnet" "internal" {
-  name                 = "internal"
+  name                 = "${var.subnet_name}"
   resource_group_name  = data.azurerm_resource_group.resource_group.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_security_group" "main" {
-  name                = "${var.prefix}-nsg"
+  name                = "${var.nsg_name}"
   location            = data.azurerm_resource_group.resource_group.location
   resource_group_name = data.azurerm_resource_group.resource_group.name
 
@@ -48,7 +48,7 @@ resource "azurerm_subnet_network_security_group_association" "main" {
 }
 
 resource "azurerm_public_ip" "public_ip" {
-  name                = "${var.prefix}-public-ip"
+  name                = "${var.public_ip_name}"
   location            = data.azurerm_resource_group.resource_group.location
   resource_group_name = data.azurerm_resource_group.resource_group.name
   allocation_method   = "Static"
@@ -56,7 +56,7 @@ resource "azurerm_public_ip" "public_ip" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  name                = "${var.nic_name}"
   location            = data.azurerm_resource_group.resource_group.location
   resource_group_name = data.azurerm_resource_group.resource_group.name
 
@@ -69,7 +69,7 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_virtual_machine" "main" {
-  name                  = "${var.prefix}-vm"
+  name                  = "${var.vm_name}"
   location              = data.azurerm_resource_group.resource_group.location
   resource_group_name   = data.azurerm_resource_group.resource_group.name
   network_interface_ids = [azurerm_network_interface.main.id]
